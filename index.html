@@ -11,11 +11,11 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Galma Design">
 <meta name="theme-color" content="#2b0a0a">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-180.png">
-<link rel="apple-touch-icon" sizes="167x167" href="icons/apple-touch-icon-167.png">
-<link rel="apple-touch-icon" sizes="152x152" href="icons/apple-touch-icon-152.png">
-<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180.png">
+<link rel="apple-touch-icon" sizes="167x167" href="apple-touch-icon-167.png">
+<link rel="apple-touch-icon" sizes="152x152" href="apple-touch-icon-152.png">
+<link rel="icon" href="icon-192.png">
 
 <style>
 :root{
@@ -312,7 +312,7 @@ h1,h2,h3{ font-family: Georgia, "Times New Roman", serif; letter-spacing:0.5px; 
   <!-- ===================== LOGIN ===================== -->
   <div class="screen active" id="screen-login">
     <div class="login-card">
-      <img class="logo" src="icons/icon-512.png" alt="Galma Design">
+      <img class="logo" src="icon-512.png" alt="Galma Design">
       <h1>GALMA <span style="color:var(--gold); font-weight:400;">DESIGN</span></h1>
       <p class="sub">Espace client — suivez votre projet d'architecture d'intérieur</p>
 
@@ -335,7 +335,7 @@ h1,h2,h3{ font-family: Georgia, "Times New Roman", serif; letter-spacing:0.5px; 
   <div class="screen" id="screen-home">
     <div class="topbar">
       <div class="brand">
-        <img src="icons/icon-192.png" alt="">
+        <img src="icon-192.png" alt="">
         <div class="name">GALMA <b>DESIGN</b></div>
       </div>
       <button class="icon-btn" onclick="go('messages')">
@@ -344,7 +344,7 @@ h1,h2,h3{ font-family: Georgia, "Times New Roman", serif; letter-spacing:0.5px; 
     </div>
 
     <div class="hero-card">
-      <img src="img/hero.jpg" alt="Projet Ahmida">
+      <img src="hero.jpg" alt="Projet Ahmida">
       <div class="hero-overlay">
         <span class="tag">● Projet en cours</span>
         <h2>Projet Ahmida</h2>
@@ -384,10 +384,10 @@ h1,h2,h3{ font-family: Georgia, "Times New Roman", serif; letter-spacing:0.5px; 
       </div>
     </div>
     <div class="cards-row">
-      <div class="plan-card" onclick="openPlan('soussol')"><img src="img/plan-soussol.jpg"><div class="lbl">Sous-sol</div></div>
-      <div class="plan-card" onclick="openPlan('rdc')"><img src="img/plan-rdc.jpg"><div class="lbl">RDC</div></div>
-      <div class="plan-card" onclick="openPlan('etage')"><img src="img/plan-etage.jpg"><div class="lbl">Étage</div></div>
-      <div class="plan-card" onclick="openPlan('ext')"><img src="img/plan-exterieur.jpg"><div class="lbl">Extérieur</div></div>
+      <div class="plan-card" onclick="openPlan('soussol')"><img src="plan-soussol.jpg"><div class="lbl">Sous-sol</div></div>
+      <div class="plan-card" onclick="openPlan('rdc')"><img src="plan-rdc.jpg"><div class="lbl">RDC</div></div>
+      <div class="plan-card" onclick="openPlan('etage')"><img src="plan-etage.jpg"><div class="lbl">Étage</div></div>
+      <div class="plan-card" onclick="openPlan('ext')"><img src="plan-exterieur.jpg"><div class="lbl">Extérieur</div></div>
     </div>
 
     <div class="section">
@@ -432,7 +432,7 @@ h1,h2,h3{ font-family: Georgia, "Times New Roman", serif; letter-spacing:0.5px; 
       <div class="plan-tab" data-plan="ext" onclick="selectPlanTab(this,'ext')">Extérieur</div>
     </div>
     <div class="plan-view">
-      <img id="planImg" src="img/plan-soussol.jpg" alt="Plan">
+      <img id="planImg" src="plan-soussol.jpg" alt="Plan">
       <div class="plan-caption" id="planCaption">Plan d'aménagement du sous-sol — 1/200 — 20/06/2026</div>
     </div>
 
@@ -555,10 +555,10 @@ h1,h2,h3{ font-family: Georgia, "Times New Roman", serif; letter-spacing:0.5px; 
 
 <script>
 const planData = {
-  soussol:{img:'img/plan-soussol.jpg', cap:"Plan d'aménagement du sous-sol — 1/200 — 20/06/2026"},
-  rdc:{img:'img/plan-rdc.jpg', cap:"Plan d'aménagement du RDC — 1/240 — 20/06/2026"},
-  etage:{img:'img/plan-etage.jpg', cap:"Plan d'aménagement de l'étage — 1/190 — 20/06/2026"},
-  ext:{img:'img/plan-exterieur.jpg', cap:"Extérieurs — 1/250 — 20/06/2026"},
+  soussol:{img:'plan-soussol.jpg', cap:"Plan d'aménagement du sous-sol — 1/200 — 20/06/2026"},
+  rdc:{img:'plan-rdc.jpg', cap:"Plan d'aménagement du RDC — 1/240 — 20/06/2026"},
+  etage:{img:'plan-etage.jpg', cap:"Plan d'aménagement de l'étage — 1/190 — 20/06/2026"},
+  ext:{img:'plan-exterieur.jpg', cap:"Extérieurs — 1/250 — 20/06/2026"},
 };
 
 function login(){
