@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Galma Design — Espace Client</title>
+
+<!-- PWA / iOS Add to Home Screen -->
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Galma Design">
+<meta name="theme-color" content="#2b0a0a">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon-180.png">
+<link rel="apple-touch-icon" sizes="167x167" href="icons/apple-touch-icon-167.png">
+<link rel="apple-touch-icon" sizes="152x152" href="icons/apple-touch-icon-152.png">
+<link rel="icon" href="icons/icon-192.png">
+
+<style>
+:root{
+  --maroon-950:#2b0a0a;
+  --maroon-900:#3d1212;
+  --maroon-800:#4a1616;
+  --maroon-700:#5e1c1c;
+  --cream:#f3efe9;
+  --cream-dim:#e7e0d6;
+  --gold:#c9a86a;
+  --text-dark:#241313;
+  --radius:18px;
+  font-size:16px;
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{margin:0; padding:0; height:100%; background:var(--maroon-950); overscroll-behavior:none;}
+body{
+  font-family:-apple-system, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+  color:var(--cream);
+  display:flex;
+  justify-content:center;
+}
+#app{
+  width:100%;
+  max-width:560px;
+  min-height:100vh;
+  min-height:100dvh;
+  display:flex;
+  flex-direction:column;
+  position:relative;
+  background:
+    radial-gradient(120% 60% at 50% -10%, rgba(201,168,106,0.10), transparent 60%),
+    linear-gradient(180deg, var(--maroon-950), #1c0707 60%);
+}
+
+/* ---------- Typography helpers ---------- */
+h1,h2,h3{ font-family: Georgia, "Times New Roman", serif; letter-spacing:0.5px; margin:0; }
+.serif{ font-family: Georgia, "Times New Roman", serif; }
+.muted{ color:rgba(243,239,233,0.6); }
+.small{ font-size:13px; }
+.tag{
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:11px; letter-spacing:1.5px; text-transform:uppercase;
+  color:var(--gold); font-weight:600;
+}
+
+/* ---------- Top bar ---------- */
+.topbar{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:calc(env(safe-area-inset-top,0px) + 18px) 22px 14px 22px;
+  position:sticky; top:0; z-index:30;
+  background:linear-gradient(180deg, rgba(43,10,10,0.97), rgba(43,10,10,0.85) 80%, transparent);
+  backdrop-filter:blur(6px);
+}
+.brand{ display:flex; align-items:center; gap:10px; }
+.brand img{ width:30px; height:30px; }
+.brand .name{ font-family:Georgia,serif; font-size:17px; letter-spacing:2px; }
+.brand .name b{ color:var(--gold); font-weight:400; }
+.icon-btn{
+  width:38px; height:38px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(243,239,233,0.08); border:1px solid rgba(243,239,233,0.12);
+  color:var(--cream);
+}
+
+/* ---------- Screens ---------- */
+.screen{ display:none; flex:1; flex-direction:column; padding-bottom:100px; animation:fade .25s ease; }
+.screen.active{ display:flex; }
+@keyframes fade{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;} }
+
+/* ---------- Login ---------- */
+#screen-login{ justify-content:center; align-items:center; padding:40px 30px; flex:1; min-height:100vh; min-height:100dvh; }
+.login-card{ width:100%; max-width:360px; text-align:center; }
+.login-card img.logo{ width:84px; margin-bottom:18px; opacity:0.95; }
+.login-card h1{ font-size:26px; margin-bottom:6px; }
+.login-card p.sub{ margin:0 0 30px; color:rgba(243,239,233,0.65); font-size:14px; }
+.field{ margin-bottom:14px; text-align:left; }
+.field label{ font-size:12px; letter-spacing:1px; text-transform:uppercase; color:var(--gold); display:block; margin-bottom:6px; }
+.field input{
+  width:100%; padding:13px 14px; border-radius:12px; border:1px solid rgba(243,239,233,0.18);
+  background:rgba(243,239,233,0.06); color:var(--cream); font-size:16px; outline:none;
+}
+.field input::placeholder{ color:rgba(243,239,233,0.35); }
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  width:100%; padding:14px 18px; border-radius:14px; border:none;
+  background:linear-gradient(135deg, var(--gold), #b08c4f);
+  color:#241313; font-weight:600; font-size:15px; letter-spacing:0.3px;
+  margin-top:10px; cursor:pointer;
+}
+.btn.secondary{
+  background:rgba(243,239,233,0.08); color:var(--cream); border:1px solid rgba(243,239,233,0.18);
+}
+.btn.ghost{ background:transparent; color:var(--cream); border:1px solid rgba(243,239,233,0.25); }
+.login-hint{ margin-top:20px; font-size:12px; color:rgba(243,239,233,0.4); line-height:1.5; }
+
+/* ---------- Home dashboard ---------- */
+.section{ padding:0 22px; margin-top:22px; }
+.section-title{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:12px; }
+.section-title h2{ font-size:18px; }
+.section-title a{ font-size:12px; color:var(--gold); text-decoration:none; }
+
+.hero-card{
+  margin:18px 22px 0; border-radius:var(--radius); overflow:hidden; position:relative;
+  height:190px; background:#000;
+}
+.hero-card img{ width:100%; height:100%; object-fit:cover; display:block; opacity:0.85; }
+.hero-overlay{
+  position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end; padding:18px;
+  background:linear-gradient(180deg, rgba(43,10,10,0) 30%, rgba(20,5,5,0.92));
+}
+.hero-overlay .tag{ margin-bottom:6px; }
+.hero-overlay h2{ font-size:21px; }
+.hero-overlay .loc{ font-size:13px; color:rgba(243,239,233,0.75); margin-top:2px; }
+
+.progress-card{
+  margin:16px 22px 0; padding:18px; border-radius:var(--radius);
+  background:rgba(243,239,233,0.05); border:1px solid rgba(243,239,233,0.1);
+}
+.progress-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+.progress-top .pct{ font-family:Georgia,serif; font-size:26px; color:var(--gold); }
+.bar{ height:8px; border-radius:6px; background:rgba(243,239,233,0.1); overflow:hidden; margin-bottom:16px; }
+.bar > span{ display:block; height:100%; background:linear-gradient(90deg, var(--gold), #e3c98a); border-radius:6px; }
+.steps{ display:flex; flex-direction:column; gap:10px; }
+.step{ display:flex; align-items:center; gap:10px; font-size:13.5px; }
+.step .dot{ width:18px; height:18px; border-radius:50%; flex:0 0 auto; display:flex; align-items:center; justify-content:center; font-size:11px; }
+.step.done .dot{ background:var(--gold); color:#241313; }
+.step.current .dot{ background:transparent; border:2px solid var(--gold); }
+.step.todo .dot{ background:transparent; border:1px solid rgba(243,239,233,0.3); }
+.step.done span.label{ color:var(--cream); }
+.step.current span.label{ color:var(--gold); font-weight:600; }
+.step.todo span.label{ color:rgba(243,239,233,0.45); }
+
+.cards-row{ display:flex; gap:12px; overflow-x:auto; padding:2px 22px 6px; margin-top:14px; scrollbar-width:none; }
+.cards-row::-webkit-scrollbar{ display:none; }
+.plan-card{
+  flex:0 0 auto; width:148px; border-radius:14px; overflow:hidden; position:relative;
+  background:#000; height:108px; border:1px solid rgba(243,239,233,0.1);
+}
+.plan-card img{ width:100%; height:100%; object-fit:cover; opacity:0.9; }
+.plan-card .lbl{
+  position:absolute; left:0; right:0; bottom:0; padding:8px 10px;
+  background:linear-gradient(180deg, transparent, rgba(10,3,3,0.92));
+  font-size:12.5px; font-weight:600;
+}
+
+.quick-actions{ display:flex; gap:12px; padding:0 22px; margin-top:18px; }
+.quick-actions .qa{
+  flex:1; display:flex; flex-direction:column; align-items:center; gap:8px;
+  padding:16px 8px; border-radius:14px; background:rgba(243,239,233,0.05); border:1px solid rgba(243,239,233,0.1);
+  font-size:12px; text-align:center; color:var(--cream);
+}
+.quick-actions .qa svg{ width:22px; height:22px; }
+
+.notice-card{
+  margin:18px 22px 0; padding:16px; border-radius:14px;
+  background:rgba(201,168,106,0.1); border:1px solid rgba(201,168,106,0.25);
+  display:flex; gap:12px; align-items:flex-start; font-size:13px; line-height:1.5;
+}
+.notice-card svg{ flex:0 0 auto; width:20px; height:20px; margin-top:1px; color:var(--gold); }
+
+/* ---------- Plans screen ---------- */
+.plan-tabs{ display:flex; gap:8px; padding:4px 22px 0; overflow-x:auto; }
+.plan-tab{
+  flex:0 0 auto; padding:9px 16px; border-radius:20px; font-size:13px;
+  background:rgba(243,239,233,0.06); border:1px solid rgba(243,239,233,0.12); color:var(--cream);
+}
+.plan-tab.active{ background:var(--gold); color:#241313; border-color:var(--gold); font-weight:600; }
+.plan-view{ padding:18px 22px 0; }
+.plan-view img{ width:100%; border-radius:14px; border:1px solid rgba(243,239,233,0.12); display:block; }
+.plan-caption{ font-size:12.5px; color:rgba(243,239,233,0.6); margin-top:10px; text-align:center; }
+
+.value-list{ list-style:none; margin:14px 0 0; padding:0; display:flex; flex-direction:column; gap:10px; }
+.value-list li{
+  display:flex; align-items:flex-start; gap:10px; font-size:13.5px; line-height:1.5;
+  padding:12px 14px; border-radius:12px; background:rgba(243,239,233,0.04); border:1px solid rgba(243,239,233,0.08);
+}
+.value-list li svg{ flex:0 0 auto; width:16px; height:16px; margin-top:2px; color:var(--gold); }
+
+/* ---------- RDV screen ---------- */
+.rdv-intro{ padding:0 22px; font-size:13.5px; color:rgba(243,239,233,0.7); line-height:1.6; margin-top:6px; }
+.day-picker{ display:flex; gap:10px; padding:18px 22px 0; overflow-x:auto; }
+.day-chip{
+  flex:0 0 auto; width:58px; padding:10px 0; border-radius:14px; text-align:center;
+  background:rgba(243,239,233,0.05); border:1px solid rgba(243,239,233,0.12);
+}
+.day-chip .dow{ font-size:11px; color:rgba(243,239,233,0.55); text-transform:uppercase; }
+.day-chip .num{ font-family:Georgia,serif; font-size:18px; margin-top:2px; }
+.day-chip.active{ background:var(--gold); color:#241313; border-color:var(--gold); }
+.day-chip.active .dow{ color:#241313; }
+
+.slot-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:16px 22px 0; }
+.slot{
+  padding:11px 0; text-align:center; border-radius:12px; font-size:13.5px;
+  background:rgba(243,239,233,0.05); border:1px solid rgba(243,239,233,0.12); color:var(--cream);
+}
+.slot.active{ background:var(--gold); color:#241313; border-color:var(--gold); font-weight:600; }
+.slot.disabled{ opacity:0.3; }
+
+.rdv-type{ display:flex; gap:10px; padding:16px 22px 0; }
+.rdv-type label{ flex:1; }
+.rdv-type input{ display:none; }
+.rdv-type .opt{
+  display:flex; flex-direction:column; align-items:center; gap:6px; padding:14px 6px;
+  border-radius:14px; background:rgba(243,239,233,0.05); border:1px solid rgba(243,239,233,0.12); font-size:12px;
+}
+.rdv-type input:checked + .opt{ background:rgba(201,168,106,0.18); border-color:var(--gold); color:var(--gold); font-weight:600; }
+
+.confirm-box{ padding:20px 22px 0; }
+.upcoming-rdv{
+  margin:18px 22px 0; padding:16px; border-radius:14px;
+  background:rgba(243,239,233,0.06); border:1px solid rgba(243,239,233,0.12);
+  display:flex; align-items:center; gap:14px;
+}
+.upcoming-rdv .date-block{
+  width:52px; height:52px; border-radius:12px; background:var(--gold); color:#241313;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; flex:0 0 auto;
+}
+.upcoming-rdv .date-block .d{ font-family:Georgia,serif; font-size:18px; line-height:1; }
+.upcoming-rdv .date-block .m{ font-size:10px; text-transform:uppercase; }
+.upcoming-rdv .info b{ display:block; font-size:14px; }
+.upcoming-rdv .info span{ font-size:12px; color:rgba(243,239,233,0.6); }
+
+/* ---------- Messages screen ---------- */
+.msg-list{ padding:14px 22px 0; display:flex; flex-direction:column; gap:14px; }
+.msg-bubble{ max-width:82%; padding:12px 14px; border-radius:16px; font-size:13.5px; line-height:1.5; }
+.msg-bubble.from-agency{ align-self:flex-start; background:rgba(243,239,233,0.08); border:1px solid rgba(243,239,233,0.1); border-bottom-left-radius:4px; }
+.msg-bubble.from-me{ align-self:flex-end; background:var(--gold); color:#241313; border-bottom-right-radius:4px; }
+.msg-meta{ font-size:11px; color:rgba(243,239,233,0.4); margin-top:4px; }
+.msg-input-bar{
+  position:fixed; left:50%; transform:translateX(-50%); bottom:0; width:100%; max-width:560px;
+  padding:10px 16px calc(env(safe-area-inset-bottom,0px) + 86px);
+  background:linear-gradient(180deg, transparent, rgba(20,5,5,0.96) 30%);
+  display:flex; gap:10px; box-sizing:border-box;
+}
+.msg-input-bar input{
+  flex:1; padding:12px 16px; border-radius:24px; border:1px solid rgba(243,239,233,0.18);
+  background:rgba(243,239,233,0.08); color:var(--cream); font-size:14px; outline:none;
+}
+.msg-input-bar button{
+  width:42px; height:42px; border-radius:50%; border:none; background:var(--gold); color:#241313;
+  display:flex; align-items:center; justify-content:center; flex:0 0 auto;
+}
+
+/* ---------- Profile ---------- */
+.profile-head{ display:flex; flex-direction:column; align-items:center; padding:10px 22px 0; text-align:center; }
+.avatar{
+  width:74px; height:74px; border-radius:50%; background:linear-gradient(135deg, var(--gold), #8a6a35);
+  display:flex; align-items:center; justify-content:center; font-family:Georgia,serif; font-size:26px; color:#241313;
+  margin-bottom:12px;
+}
+.list-menu{ padding:20px 22px 0; display:flex; flex-direction:column; gap:1px; border-radius:14px; overflow:hidden; background:rgba(243,239,233,0.05); }
+.list-menu .item{
+  display:flex; align-items:center; justify-content:space-between; padding:15px 16px;
+  border-bottom:1px solid rgba(243,239,233,0.08); font-size:14px;
+}
+.list-menu .item:last-child{ border-bottom:none; }
+.list-menu .item .left{ display:flex; align-items:center; gap:12px; }
+.list-menu .item svg{ width:18px; height:18px; color:var(--gold); }
+.chev{ color:rgba(243,239,233,0.35); }
+
+/* ---------- Bottom nav ---------- */
+.tabbar{
+  position:fixed; left:50%; transform:translateX(-50%); bottom:0; width:100%; max-width:560px;
+  display:flex; justify-content:space-around;
+  padding:10px 8px calc(env(safe-area-inset-bottom,0px) + 10px);
+  background:rgba(24,7,7,0.92); backdrop-filter:blur(14px);
+  border-top:1px solid rgba(243,239,233,0.08); z-index:40;
+}
+.tabbar.hidden{ display:none; }
+.tab-item{
+  display:flex; flex-direction:column; align-items:center; gap:4px; font-size:10.5px;
+  color:rgba(243,239,233,0.45); flex:1; background:none; border:none;
+}
+.tab-item.active{ color:var(--gold); }
+.tab-item svg{ width:22px; height:22px; }
+
+/* ---------- Toast ---------- */
+#toast{
+  position:fixed; left:50%; bottom:110px; transform:translateX(-50%) translateY(20px);
+  background:var(--cream); color:#241313; padding:12px 18px; border-radius:30px; font-size:13px;
+  opacity:0; transition:all .3s ease; pointer-events:none; z-index:100; max-width:80%; text-align:center;
+  box-shadow:0 8px 24px rgba(0,0,0,0.35);
+}
+#toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* utility */
+.hidden{ display:none !important; }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ===================== LOGIN ===================== -->
+  <div class="screen active" id="screen-login">
+    <div class="login-card">
+      <img class="logo" src="icons/icon-512.png" alt="Galma Design">
+      <h1>GALMA <span style="color:var(--gold); font-weight:400;">DESIGN</span></h1>
+      <p class="sub">Espace client — suivez votre projet d'architecture d'intérieur</p>
+
+      <div class="field">
+        <label>E-mail</label>
+        <input type="email" id="loginEmail" placeholder="vous@exemple.com" value="ahmida@client.com">
+      </div>
+      <div class="field">
+        <label>Mot de passe</label>
+        <input type="password" id="loginPass" placeholder="••••••••" value="••••••••">
+      </div>
+      <button class="btn" onclick="login()">Se connecter</button>
+      <button class="btn ghost" onclick="login()">Continuer en tant qu'invité</button>
+
+      <p class="login-hint">En vous connectant, vous accédez aux maquettes, plans et à l'avancement de votre projet PROJET AHMIDA — Marrakech.</p>
+    </div>
+  </div>
+
+  <!-- ===================== HOME ===================== -->
+  <div class="screen" id="screen-home">
+    <div class="topbar">
+      <div class="brand">
+        <img src="icons/icon-192.png" alt="">
+        <div class="name">GALMA <b>DESIGN</b></div>
+      </div>
+      <button class="icon-btn" onclick="go('messages')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" width="18" height="18"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+      </button>
+    </div>
+
+    <div class="hero-card">
+      <img src="img/hero.jpg" alt="Projet Ahmida">
+      <div class="hero-overlay">
+        <span class="tag">● Projet en cours</span>
+        <h2>Projet Ahmida</h2>
+        <div class="loc">Marrakech · Villa — Modification des plans d'aménagement</div>
+      </div>
+    </div>
+
+    <div class="progress-card" style="margin-left:22px; margin-right:22px;">
+      <div class="progress-top">
+        <div>
+          <div class="tag">Avancement</div>
+          <div class="muted small" style="margin-top:4px;">Étape actuelle : Aménagement</div>
+        </div>
+        <div class="pct">60%</div>
+      </div>
+      <div class="bar"><span style="width:60%"></span></div>
+      <div class="steps">
+        <div class="step done"><div class="dot">✓</div><span class="label">Besoins &amp; souhaits</span></div>
+        <div class="step done"><div class="dot">✓</div><span class="label">Budget</span></div>
+        <div class="step current"><div class="dot">3</div><span class="label">Aménagement — plans en révision</span></div>
+        <div class="step todo"><div class="dot">4</div><span class="label">Ambiance &amp; matériaux</span></div>
+        <div class="step todo"><div class="dot">5</div><span class="label">Construction / Rénovation</span></div>
+        <div class="step todo"><div class="dot">6</div><span class="label">Ameublement sur-mesure</span></div>
+        <div class="step todo"><div class="dot">7</div><span class="label">Installation &amp; touche finale</span></div>
+      </div>
+    </div>
+
+    <div class="notice-card">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 9v4m0 4h.01M10.3 3.9 2.4 17.5a1.8 1.8 0 0 0 1.5 2.7h16.2a1.8 1.8 0 0 0 1.5-2.7L13.7 3.9a1.8 1.8 0 0 0-3.4 0z"/></svg>
+      <div><b>À retravailler :</b> les têtes de lit à l'étage, afin d'y intégrer des lits enfants dans les suites 2 et 3.</div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">
+        <h2>Plans d'aménagement</h2>
+        <a href="#" onclick="go('plans')">Tout voir</a>
+      </div>
+    </div>
+    <div class="cards-row">
+      <div class="plan-card" onclick="openPlan('soussol')"><img src="img/plan-soussol.jpg"><div class="lbl">Sous-sol</div></div>
+      <div class="plan-card" onclick="openPlan('rdc')"><img src="img/plan-rdc.jpg"><div class="lbl">RDC</div></div>
+      <div class="plan-card" onclick="openPlan('etage')"><img src="img/plan-etage.jpg"><div class="lbl">Étage</div></div>
+      <div class="plan-card" onclick="openPlan('ext')"><img src="img/plan-exterieur.jpg"><div class="lbl">Extérieur</div></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><h2>Accès rapide</h2></div>
+    </div>
+    <div class="quick-actions">
+      <button class="qa" onclick="go('rdv')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M16 2.5v4M8 2.5v4M3 9.5h18"/></svg>
+        Prendre RDV
+      </button>
+      <button class="qa" onclick="window.open('https://pinterest.com','_blank')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9.5"/><path d="M9 18s2-7 1.5-9.5C10 6 12 6 12.5 7.5c.6 1.7-.7 4-1.7 5.7"/></svg>
+        Pinterest
+      </button>
+      <button class="qa" onclick="callAgency()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 16.9v2a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 1h2a2 2 0 0 1 2 1.7c.1 1.3.4 2.6.8 3.8a2 2 0 0 1-.5 2.1L7.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c1.2.4 2.5.7 3.8.8a2 2 0 0 1 1.7 2z"/></svg>
+        Appeler
+      </button>
+    </div>
+
+    <div class="section" style="margin-top:26px;">
+      <div class="section-title"><h2>Prochain rendez-vous</h2></div>
+    </div>
+    <div class="upcoming-rdv">
+      <div class="date-block"><div class="d">08</div><div class="m">Juil</div></div>
+      <div class="info">
+        <b>Présentation — Ambiance &amp; matériaux</b>
+        <span>11h00 · Visioconférence avec Galma Design</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== PLANS ===================== -->
+  <div class="screen" id="screen-plans">
+    <div class="topbar">
+      <div class="brand"><div class="name serif">Plans &amp; maquette</div></div>
+    </div>
+    <div class="plan-tabs">
+      <div class="plan-tab active" data-plan="soussol" onclick="selectPlanTab(this,'soussol')">Sous-sol</div>
+      <div class="plan-tab" data-plan="rdc" onclick="selectPlanTab(this,'rdc')">RDC</div>
+      <div class="plan-tab" data-plan="etage" onclick="selectPlanTab(this,'etage')">Étage</div>
+      <div class="plan-tab" data-plan="ext" onclick="selectPlanTab(this,'ext')">Extérieur</div>
+    </div>
+    <div class="plan-view">
+      <img id="planImg" src="img/plan-soussol.jpg" alt="Plan">
+      <div class="plan-caption" id="planCaption">Plan d'aménagement du sous-sol — 1/200 — 20/06/2026</div>
+    </div>
+
+    <div class="section">
+      <div class="section-title"><h2>Valeur ajoutée des modifications</h2></div>
+      <ul class="value-list">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Salle de cinéma</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Kids club (49 m²)</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Cuisine de service (monte-plat) + cellier</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Zone de rangement pour équipements d'entretien</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Couchages enfants dans 2 suites</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Bureau (coffre-fort) et salon TV dans la master bedroom</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg>Zone personnel indépendante et guérite</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <button class="btn secondary" onclick="window.open('https://pinterest.com','_blank')">Voir le tableau Pinterest du projet</button>
+    </div>
+  </div>
+
+  <!-- ===================== RDV ===================== -->
+  <div class="screen" id="screen-rdv">
+    <div class="topbar">
+      <div class="brand"><div class="name serif">Prendre rendez-vous</div></div>
+    </div>
+    <p class="rdv-intro">Choisissez un créneau pour échanger avec votre architecte d'intérieur — en agence, par visioconférence ou par téléphone.</p>
+
+    <div class="day-picker" id="dayPicker"></div>
+    <div class="slot-grid" id="slotGrid"></div>
+
+    <div class="section"><div class="section-title"><h2>Type de rendez-vous</h2></div></div>
+    <div class="rdv-type">
+      <label><input type="radio" name="rdvtype" value="agence" checked><div class="opt">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" width="20" height="20"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/></svg>
+        En agence</div></label>
+      <label><input type="radio" name="rdvtype" value="visio"><div class="opt">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" width="20" height="20"><rect x="2.5" y="6" width="14" height="12" rx="2"/><path d="M16.5 10.5 21 8v8l-4.5-2.5"/></svg>
+        Visio</div></label>
+      <label><input type="radio" name="rdvtype" value="tel"><div class="opt">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" width="20" height="20"><path d="M22 16.9v2a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 1h2a2 2 0 0 1 2 1.7c.1 1.3.4 2.6.8 3.8a2 2 0 0 1-.5 2.1L7.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c1.2.4 2.5.7 3.8.8a2 2 0 0 1 1.7 2z"/></svg>
+        Téléphone</div></label>
+    </div>
+
+    <div class="confirm-box">
+      <button class="btn" onclick="confirmRdv()">Confirmer le rendez-vous</button>
+    </div>
+  </div>
+
+  <!-- ===================== MESSAGES ===================== -->
+  <div class="screen" id="screen-messages">
+    <div class="topbar">
+      <div class="brand"><div class="name serif">Messages</div></div>
+    </div>
+    <div class="msg-list" id="msgList">
+      <div class="msg-bubble from-agency">Bonjour ! Voici la dernière version des plans du sous-sol avec le kids club et la salle de cinéma intégrés 🎬<div class="msg-meta">Galma Design · hier</div></div>
+      <div class="msg-bubble from-me">Merci, c'est parfait ! Peut-on revoir les têtes de lit à l'étage ?<div class="msg-meta">Vous · hier</div></div>
+      <div class="msg-bubble from-agency">Bien sûr, on retravaille les suites 2 et 3 pour intégrer des lits enfants. On vous propose une nouvelle version avant notre RDV du 8 juillet.<div class="msg-meta">Galma Design · 10:42</div></div>
+    </div>
+  </div>
+  <div class="msg-input-bar hidden" id="msgInputBar">
+    <input type="text" id="msgInput" placeholder="Écrire un message…">
+    <button onclick="sendMsg()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg>
+    </button>
+  </div>
+
+  <!-- ===================== PROFILE ===================== -->
+  <div class="screen" id="screen-profile">
+    <div class="topbar">
+      <div class="brand"><div class="name serif">Mon compte</div></div>
+    </div>
+    <div class="profile-head">
+      <div class="avatar">A</div>
+      <h2 style="font-size:18px;">Famille Ahmida</h2>
+      <p class="muted small">Projet Ahmida · Marrakech</p>
+    </div>
+
+    <div class="list-menu">
+      <div class="item"><div class="left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M16 2.5v4M8 2.5v4M3 9.5h18"/></svg><span>Mes rendez-vous</span></div><span class="chev">›</span></div>
+      <div class="item"><div class="left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg><span>Documents &amp; devis</span></div><span class="chev">›</span></div>
+      <div class="item"><div class="left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.2"/><path d="M5 20.5c0-3.8 3.1-6.5 7-6.5s7 2.7 7 6.5"/></svg><span>Mes informations</span></div><span class="chev">›</span></div>
+      <div class="item"><div class="left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v3M12 18v3M4.2 6.2l2.1 2.1M17.7 15.7l2.1 2.1M3 12h3M18 12h3M4.2 17.8l2.1-2.1M17.7 8.3l2.1-2.1"/><circle cx="12" cy="12" r="3.5"/></svg><span>Notifications</span></div><span class="chev">›</span></div>
+      <div class="item"><div class="left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M22 16.9v2a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 1h2a2 2 0 0 1 2 1.7c.1 1.3.4 2.6.8 3.8a2 2 0 0 1-.5 2.1L7.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c1.2.4 2.5.7 3.8.8a2 2 0 0 1 1.7 2z"/></svg><span>+33 6 37 23 36 59</span></div><span class="chev">›</span></div>
+      <div class="item"><div class="left"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><span>contact@galma-design.com</span></div><span class="chev">›</span></div>
+    </div>
+
+    <div class="section">
+      <button class="btn secondary" onclick="logout()">Se déconnecter</button>
+    </div>
+    <p class="muted small" style="text-align:center; margin-top:18px;">Galma Design · www.galma-design.com</p>
+  </div>
+
+  <!-- ===================== TAB BAR ===================== -->
+  <div class="tabbar hidden" id="tabbar">
+    <button class="tab-item active" data-tab="home" onclick="go('home')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h14V10"/></svg>
+      Accueil
+    </button>
+    <button class="tab-item" data-tab="plans" onclick="go('plans')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      Plans
+    </button>
+    <button class="tab-item" data-tab="rdv" onclick="go('rdv')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4.5" width="18" height="16" rx="2"/><path d="M16 2.5v4M8 2.5v4M3 9.5h18"/></svg>
+      RDV
+    </button>
+    <button class="tab-item" data-tab="messages" onclick="go('messages')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+      Messages
+    </button>
+    <button class="tab-item" data-tab="profile" onclick="go('profile')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.2"/><path d="M5 20.5c0-3.8 3.1-6.5 7-6.5s7 2.7 7 6.5"/></svg>
+      Profil
+    </button>
+  </div>
+
+  <div id="toast"></div>
+</div>
+
+<script>
+const planData = {
+  soussol:{img:'img/plan-soussol.jpg', cap:"Plan d'aménagement du sous-sol — 1/200 — 20/06/2026"},
+  rdc:{img:'img/plan-rdc.jpg', cap:"Plan d'aménagement du RDC — 1/240 — 20/06/2026"},
+  etage:{img:'img/plan-etage.jpg', cap:"Plan d'aménagement de l'étage — 1/190 — 20/06/2026"},
+  ext:{img:'img/plan-exterieur.jpg', cap:"Extérieurs — 1/250 — 20/06/2026"},
+};
+
+function login(){
+  document.getElementById('screen-login').classList.remove('active');
+  go('home');
+  document.getElementById('tabbar').classList.remove('hidden');
+  showToast('Bienvenue, Famille Ahmida 👋');
+}
+function logout(){
+  document.getElementById('tabbar').classList.add('hidden');
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-login').classList.add('active');
+  document.getElementById('msgInputBar').classList.add('hidden');
+}
+function go(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+name).classList.add('active');
+  document.querySelectorAll('.tab-item').forEach(t=>t.classList.toggle('active', t.dataset.tab===name));
+  document.getElementById('msgInputBar').classList.toggle('hidden', name!=='messages');
+  window.scrollTo(0,0);
+}
+function openPlan(p){ go('plans'); selectPlanTab(document.querySelector('.plan-tab[data-plan="'+p+'"]'), p); }
+function selectPlanTab(el,p){
+  document.querySelectorAll('.plan-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('planImg').src = planData[p].img;
+  document.getElementById('planCaption').textContent = planData[p].cap;
+}
+function callAgency(){ window.location.href = 'tel:+33637233659'; }
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2200);
+}
+
+/* RDV builder */
+const dows = ['LUN','MAR','MER','JEU','VEN','SAM'];
+function buildDays(){
+  const wrap = document.getElementById('dayPicker');
+  const today = new Date();
+  let html='';
+  for(let i=0;i<10;i++){
+    const d = new Date(today); d.setDate(today.getDate()+i);
+    if(d.getDay()===0) continue; // skip Sunday
+    html += `<div class="day-chip${i===2?' active':''}" data-i="${i}" onclick="selectDay(this)">
+      <div class="dow">${dows[(d.getDay()+6)%7]}</div><div class="num">${d.getDate()}</div></div>`;
+  }
+  wrap.innerHTML = html;
+}
+function selectDay(el){
+  document.querySelectorAll('.day-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+}
+function buildSlots(){
+  const slots = ['9h00','10h30','11h00','14h00','15h30','16h30'];
+  const wrap = document.getElementById('slotGrid');
+  wrap.innerHTML = slots.map((s,i)=>`<div class="slot${i===2?' active':''}" onclick="selectSlot(this)">${s}</div>`).join('');
+}
+function selectSlot(el){
+  document.querySelectorAll('.slot').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+}
+function confirmRdv(){
+  showToast('Rendez-vous demandé — confirmation à venir ✓');
+  go('home');
+}
+buildDays(); buildSlots();
+
+/* Messages */
+function sendMsg(){
+  const input = document.getElementById('msgInput');
+  if(!input.value.trim()) return;
+  const list = document.getElementById('msgList');
+  const div = document.createElement('div');
+  div.className='msg-bubble from-me';
+  div.innerHTML = input.value + '<div class="msg-meta">Vous · à l\'instant</div>';
+  list.appendChild(div);
+  input.value='';
+  list.scrollTop = list.scrollHeight;
+}
+document.getElementById('msgInput')?.addEventListener('keypress', e=>{ if(e.key==='Enter') sendMsg(); });
+
+/* Enter key on login */
+document.getElementById('loginPass')?.addEventListener('keypress', e=>{ if(e.key==='Enter') login(); });
+</script>
+</body>
+</html>
